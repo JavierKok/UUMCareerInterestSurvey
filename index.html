@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>QR Code Redirect</title>
+    <script>
+        // Function to check if a cookie exists
+        function getCookie(name) {
+            let cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                let cookie = cookies[i].trim();
+                if (cookie.indexOf(name + "=") == 0) {
+                    return cookie.substring((name + "=").length, cookie.length);
+                }
+            }
+            return null;
+        }
+
+        // Function to set a cookie
+        function setCookie(name, value, days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "expires=" + date.toUTCString();
+            document.cookie = name + "=" + value + ";" + expires + ";path=/";
+        }
+
+        // Function to redirect to the Google Form
+        function redirectToForm() {
+            const formUrl = "https://docs.google.com/forms/d/e/1FAIpQLSfAdIWtFSkbP82pghXO6eikH-1eVkn7yV6fNAeJ9E-jdkw2eA/viewform"; // Replace with your Google Form URL
+            window.location.href = formUrl;
+        }
+
+        // Check if the user has already visited
+        window.onload = function () {
+            let userVisited = getCookie("qrScanned");
+
+            if (userVisited) {
+                // User has already visited, show a message
+                document.getElementById("message").textContent = "You have already accessed this form, thank you.";
+            } else {
+                // First time visit, set the cookie and redirect
+                setCookie("qrScanned", "true", 365); // Cookie valid for 1 year
+                redirectToForm();
+            }
+        };
+    </script>
+</head>
+<body>
+    <h1 id="message">Redirecting to the form...</h1>
+</body>
+</html>
